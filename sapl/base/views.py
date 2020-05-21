@@ -12,7 +12,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.db import connection
 from django.db.models import Count, Q, ProtectedError, Max
 from django.shortcuts import render

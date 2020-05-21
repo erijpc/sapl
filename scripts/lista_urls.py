@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
 if True:
     from sapl.urls import urlpatterns
-    from django.core.urlresolvers import RegexURLResolver
+    from django.urls import RegexURLResolver
 
 
 class ListaUrls():
