@@ -3,7 +3,7 @@ django-haystack==2.8.1
 django-filter==2.0.0
 djangorestframework==3.9.1
 dj-database-url==0.5.0
-django-braces==1.9.0
+django-braces==1.14.0
 django-crispy-forms==1.7.2
 django-floppyforms==1.7.0
 django-extra-views==0.12.0
@@ -31,6 +31,7 @@ more-itertools==8.2.0
 pysolr==3.6.0
 PyPDF4==1.27.0
 pyoai==2.5.0
+whitenose=5.1.0
 
 git+https://github.com/interlegis/trml2pdf
 git+https://github.com/interlegis/django-admin-bootstrapped

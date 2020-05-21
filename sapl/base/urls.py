@@ -3,9 +3,10 @@ import os
 from django.conf.urls import include, url
 from django.contrib.auth import views
 from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.views import (password_reset, password_reset_complete,
-                                       password_reset_confirm,
-                                       password_reset_done)
+from django.contrib.auth.views import ( PasswordResetView, PasswordResetCompleteView,
+                                       PasswordResetConfirmView,
+                                       PasswordResetDoneView)
+
 from django.views.generic.base import RedirectView, TemplateView
 
 from sapl.base.views import AutorCrud, ConfirmarEmailView, TipoAutorCrud, get_estatistica, DetailUsuarioView
@@ -59,7 +60,7 @@ alterar_senha = [
 
 recuperar_senha = [
     url(r'^recuperar-senha/email/$',
-        password_reset,
+        PasswordResetView.as_view(),
         {'post_reset_redirect': 'sapl.base:recuperar_senha_finalizado',
          'email_template_name': 'base/recuperar_senha_email.html',
          'html_email_template_name': 'base/recuperar_senha_email.html',
@@ -69,19 +70,19 @@ recuperar_senha = [
         name='recuperar_senha_email'),
 
     url(r'^recuperar-senha/finalizado/$',
-        password_reset_done,
+        PasswordResetDoneView.as_view(),
         {'template_name': 'base/recupera_senha_email_enviado.html'},
         name='recuperar_senha_finalizado'),
 
     url(r'^recuperar-senha/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
-        password_reset_confirm,
+        PasswordResetConfirmView.as_view(),
         {'post_reset_redirect': 'sapl.base:recuperar_senha_completo',
          'template_name': 'base/nova_senha_form.html',
          'set_password_form': NovaSenhaForm},
         name='recuperar_senha_confirma'),
 
     url(r'^recuperar-senha/completo/$',
-        password_reset_complete,
+        PasswordResetCompleteView.as_view(),
         {'template_name': 'base/recuperar_senha_completo.html'},
         name='recuperar_senha_completo'),
 ]
@@ -201,10 +202,10 @@ urlpatterns = [
         (TemplateView.as_view(template_name='sistema.html')),
         name='sistema'),
 
-    url(r'^login/$', views.login, {
+    url(r'^login/$', views.LoginView.as_view(), {
         'template_name': 'base/login.html', 'authentication_form': LoginForm},
         name='login'),
-    url(r'^logout/$', views.logout, {'next_page': '/login'}, name='logout'),
+    url(r'^logout/$', views.LogoutView.as_view(), {'next_page': '/login'}, name='logout'),
 
     url(r'^sistema/search/', SaplSearchView(), name='haystack_search'),
 
