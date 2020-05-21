@@ -22,7 +22,6 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.translation import string_concat
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (CreateView, DetailView, DeleteView, FormView, ListView, UpdateView)
 from django.views.generic.base import RedirectView, TemplateView
@@ -108,7 +107,7 @@ class TipoAutorCrud(CrudAux):
         @property
         def verbose_name(self):
             vn = super().verbose_name
-            vn = string_concat(vn, ' ', _('Externo ao SAPL'))
+            vn = "{} {}".format(vn, _('Externo ao SAPL'))
             return vn
 
     class ListView(CrudAux.ListView):

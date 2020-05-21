@@ -21,7 +21,6 @@ from django.http.response import (HttpResponse, HttpResponseRedirect,
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.dateparse import parse_date
 from django.utils.encoding import force_text
-from django.utils.translation import string_concat
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
@@ -121,11 +120,7 @@ class IntegracaoTaView(TemplateView):
                     tipo_ta.save()
 
         except Exception as e:
-            print(
-                string_concat(
-                    _('Ocorreu erro na importação do arquivo base dos Tipos de'
-                      'Dispositivos, entre outras informações iniciais.'),
-                    str(e)))
+            print("{} {}".format(_('Ocorreu erro na importação do arquivo base dos Tipos de Dispositivos, entre outras informações iniciais.'), str(e)))
             return self.get_redirect_deactivated()
 
         assert hasattr(self, 'map_fields'), _(
@@ -1876,24 +1871,25 @@ class ActionDispositivoCreateMixin(ActionsCommonsMixin):
             base = Dispositivo.objects.get(
                 pk=self.kwargs['dispositivo_id'] if not _base else _base)
 
-            result = [{'tipo_insert': force_text(string_concat(
-                _('Inserir Após'),
-                ' ',
-                base.tipo_dispositivo.nome)),
-                'icone': '&#8631;&nbsp;',
-                'action': 'json_add_next',
-                'itens': []},
-                {'tipo_insert': force_text(string_concat(
-                    _('Inserir em'),
-                    ' ',
-                    base.tipo_dispositivo.nome)),
-                 'icone': '&#8690;&nbsp;',
-                 'action': 'json_add_in',
-                 'itens': []},
-                {'tipo_insert': force_text(_('Inserir Antes')),
-                 'icone': '&#8630;&nbsp;',
-                 'action': 'json_add_prior',
-                 'itens': []}]
+            result = [
+                {
+                    'tipo_insert': force_text("{} {}".format(_('Inserir Após'), base.tipo_dispositivo.nome)),
+                    'icone': '&#8631;&nbsp;',
+                    'action': 'json_add_next',
+                    'itens': []},
+                {
+                    'tipo_insert': force_text("{} {}".format(_('Inserir em'), base.tipo_dispositivo.nome)),
+                    'icone': '&#8690;&nbsp;',
+                    'action': 'json_add_in',
+                    'itens': []
+                },
+                {
+                    'tipo_insert': force_text(_('Inserir Antes')),
+                    'icone': '&#8630;&nbsp;',
+                    'action': 'json_add_prior',
+                    'itens': []
+                }
+            ]
 
             perfil_pk = request.session['perfil_estrutural']
 
