@@ -211,14 +211,18 @@ class AppConfig(models.Model):
 @reversion.register()
 class TipoAutor(models.Model):
     descricao = models.CharField(
-        max_length=50, verbose_name=_('Descrição'),
-        help_text=_('Obs: Não crie tipos de autores '
-                    'semelhante aos tipos fixos. '))
+        max_length=50,
+        verbose_name=_('Descrição'),
+        help_text=_('Obs: Não crie tipos de autores semelhante aos tipos fixos. ')
+    )
 
     content_type = models.OneToOneField(
         ContentType,
-        null=True, default=None,
-        verbose_name=_('Modelagem no SAPL'))
+        null=True,
+        default=None,
+        verbose_name=_('Modelagem no SAPL'),
+        on_delete=models.PROTECT
+    )
 
     class Meta:
         ordering = ['descricao']
@@ -231,25 +235,44 @@ class TipoAutor(models.Model):
 
 @reversion.register()
 class Autor(models.Model):
+    user = models.OneToOneField(
+        get_settings_auth_user_model(),
+        on_delete=models.SET_NULL,
+        null=True
+    )
 
-    user = models.OneToOneField(get_settings_auth_user_model(),
-                                on_delete=models.SET_NULL,
-                                null=True)
-
-    tipo = models.ForeignKey(TipoAutor, verbose_name=_('Tipo do Autor'),
-                             on_delete=models.PROTECT)
+    tipo = models.ForeignKey(
+        TipoAutor,
+        verbose_name=_('Tipo do Autor'),
+        on_delete=models.PROTECT
+    )
 
     content_type = models.ForeignKey(
         ContentType,
-        blank=True, null=True, default=None)
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.PROTECT
+    )
+
     object_id = models.PositiveIntegerField(
-        blank=True, null=True, default=None)
+        blank=True,
+        null=True,
+        default=None
+    )
+
     autor_related = GenericForeignKey('content_type', 'object_id')
 
     nome = models.CharField(
-        max_length=120, blank=True, verbose_name=_('Nome do Autor'))
+        max_length=120,
+        blank=True,
+        verbose_name=_('Nome do Autor')
+    )
 
-    cargo = models.CharField(max_length=50, blank=True)
+    cargo = models.CharField(
+        max_length=50,
+        blank=True
+    )
 
     class Meta:
         verbose_name = _('Autor')
