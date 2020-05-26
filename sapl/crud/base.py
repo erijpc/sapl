@@ -609,7 +609,7 @@ class CrudListView(PermissionRequiredContainerCrudMixin, ListView):
                     logger.error("{} {}".format(_('ERRO: construção da tupla de ordenação.'), str(e)))
 
         # print(queryset.query)
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return queryset
 
         if self.container_field:
@@ -812,7 +812,7 @@ class CrudDetailView(PermissionRequiredContainerCrudMixin,
         else:
             queryset = super().get_queryset()
 
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return queryset
 
         if self.container_field_set:

@@ -99,7 +99,7 @@ def recuperar_materia_protocolo(request):
 def doc_texto_integral(request, pk):
     can_see = True
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         app_config = AppConfig.objects.last()
         if app_config and app_config.documentos_administrativos == 'R':
             can_see = False

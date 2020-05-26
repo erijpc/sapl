@@ -620,7 +620,7 @@ class AppVersionView(APIView):
             'description': 'Sistema de Apoio ao Processo Legislativo',
             'version': settings.SAPL_VERSION,
             'user': request.user.username,
-            'is_authenticated': request.user.is_authenticated(),
+            'is_authenticated': request.user.is_authenticated,
         }
         return Response(content)
 
