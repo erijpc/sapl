@@ -311,6 +311,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_FAIL_SILENTLY = not DEBUG
 FLOPPY_FORMS_USE_GIS = False
 
+FORM_RENDERER = 'django.forms.renderers.DjangoTemplates'
+
 # suprime texto de ajuda default do django-filter
 FILTERS_HELP_TEXT_FILTER = False
 
