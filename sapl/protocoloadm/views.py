@@ -1037,7 +1037,7 @@ class PesquisarDocumentoAdministrativoView(DocumentoAdministrativoMixin,
         # é usada essa verificação anônima para quando os documentos administrativos
         # estão no modo ostensivo, mas podem existir documentos administrativos
         # restritos
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             length = self.object_list.filter(restrito=False).count()
         else:
             length = self.object_list.count()
