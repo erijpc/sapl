@@ -220,9 +220,10 @@ class TextoArticulado(TimestampedMixin):
         on_delete=models.PROTECT
     )
 
-    participacao_social = models.NullBooleanField(
-        default=None,
-        blank=True, null=True,
+    participacao_social = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
         choices=PARTICIPACAO_SOCIAL_CHOICES,
         verbose_name=_('Participação Social')
     )
