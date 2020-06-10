@@ -1380,20 +1380,20 @@ def bancada_comissao_autor_externo():
 
     lista_bancada_autor_externo = []
     for bancada in Bancada.objects.all().order_by('nome'):
-        autor_externo = bancada.autor.filter(tipo=tipo_autor_externo)
+        autor_externo = bancada.autor.filter(tipo__in=tipo_autor_externo)
 
         if autor_externo:
-            q_autor_externo = bancada.autor.get(tipo=tipo_autor_externo)
+            q_autor_externo = bancada.autor.get(tipo__in=tipo_autor_externo)
             lista_bancada_autor_externo.append(
                 (q_autor_externo, bancada, 'Bancada', 'sistema/bancada')
             )
 
     lista_comissao_autor_externo = []
     for comissao in Comissao.objects.all().order_by('nome'):
-        autor_externo = comissao.autor.filter(tipo=tipo_autor_externo)
+        autor_externo = comissao.autor.filter(tipo__in=tipo_autor_externo)
 
         if autor_externo:
-            q_autor_externo = comissao.autor.get(tipo=tipo_autor_externo)
+            q_autor_externo = comissao.autor.get(tipo__in=tipo_autor_externo)
             lista_comissao_autor_externo.append(
                 (q_autor_externo, comissao, 'Comissão', 'comissao')
             )
