@@ -403,7 +403,8 @@ def test_documento_administrativo_protocolo_inexistente():
                                              'data': '2017-10-10',
                                              'numero_protocolo': '11',
                                              'ano_protocolo': '2017',
-                                             'restrito': False
+                                             'restrito': False,
+                                             'tramitacao': False
                                              })
 
     assert not form.is_valid()

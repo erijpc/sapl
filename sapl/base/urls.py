@@ -10,7 +10,7 @@ from django.contrib.auth.views import ( PasswordResetView, PasswordResetComplete
 from django.views.generic.base import RedirectView, TemplateView
 
 from sapl.base.views import AutorCrud, ConfirmarEmailView, TipoAutorCrud, get_estatistica, DetailUsuarioView
-from sapl.settings import EMAIL_SEND_USER, MEDIA_URL
+from sapl.settings import EMAIL_SEND_USER, MEDIA_URL, LOGOUT_REDIRECT_URL
 
 from .apps import AppConfig
 from .forms import LoginForm, NovaSenhaForm, RecuperarSenhaForm
@@ -200,7 +200,7 @@ urlpatterns = [
 
     url(r'^login/$', views.LoginView.as_view(template_name= 'base/login.html', authentication_form= LoginForm),
         name='login'),
-    url(r'^logout/$', views.LogoutView.as_view(), {'next_page': '/login'}, name='logout'),
+    url(r'^logout/$', views.LogoutView.as_view(), {'next_page': LOGOUT_REDIRECT_URL}, name='logout'),
 
     url(r'^sistema/search/', SaplSearchView(), name='haystack_search'),
 

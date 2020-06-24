@@ -369,5 +369,6 @@ def remove_warnings():
         message='Unable to import floppyforms.gis'
     )
 
+LOGOUT_REDIRECT_URL = '/login'
 
 remove_warnings()
