@@ -104,11 +104,8 @@ def inf_basicas(inf_basicas_dic):
     tmp += '\t\t<para style="P2">\n'
     tmp += '\t\t\t<font color="white"> </font>\n'
     tmp += '\t\t</para>\n'
-    tmp += '\t\t<para style="P2" spaceAfter="5"><b>Tipo da Sessão: </b> ' + \
-        nom_sessao + '</para>\n'
-    tmp += '\t\t<para style="P2" spaceAfter="5"><b>Abertura: </b> ' + \
-        dat_inicio_sessao.strftime(
-            "%d/%m/%Y") + ' <b>- </b> ' + hr_inicio_sessao + '</para>\n'
+    tmp += '\t\t<para style="P2" spaceAfter="5"><b>Tipo da Sessão: </b> ' + nom_sessao + '</para>\n'
+    tmp += '\t\t<para style="P2" spaceAfter="5"><b>Abertura: </b> ' + dat_inicio_sessao.strftime("%d/%m/%Y") + ' <b>- </b> ' + hr_inicio_sessao + '</para>\n'
 
     return tmp
 
@@ -124,7 +121,7 @@ def build_expedientes(expedientes):
     return tmp
 
 
-def expediente_materia(lst_expediente_materia):
+def expediente_materia(lst_expediente_materia, sessao_finalizada):
     """
     """
     tmp = ''
@@ -132,25 +129,34 @@ def expediente_materia(lst_expediente_materia):
     tmp += '\t\t<para style="P2">\n'
     tmp += '\t\t\t<font color="white"> </font>\n'
     tmp += '\t\t</para>\n'
-    tmp += '<blockTable style="repeater" repeatRows="1">\n'
-    tmp += '<tr><td >Matéria</td><td>Ementa</td><td>Situação</td></tr>\n'
-    for expediente_materia in lst_expediente_materia:
-        tmp += '<tr><td><para style="P3"><b>' + str(expediente_materia['num_ordem']) + '</b> - ' + \
-               expediente_materia["tipo_materia"] + ' No. ' + \
-               expediente_materia['id_materia'] + '</para>\n' + '<para style="P3"><b>' + expediente_materia['num_autores'] + ': </b>' + \
-               expediente_materia['nom_autor'] + '</para></td>\n'
-        txt_ementa = expediente_materia['txt_ementa'].replace('&', '&amp;')
-        if len(txt_ementa) > 1000:
-            txt_ementa = txt_ementa[:1000] + "..."
-        tmp += '<td><para style="P4">' + txt_ementa + '</para>' + '<para style="P4">' + expediente_materia['ordem_observacao'] + '</para></td>\n'
-        tmp += '<td><para style="P3">' + \
-            str(expediente_materia['des_situacao']) + '</para></td></tr>\n'
+    if lst_expediente_materia:
+        tmp += '<blockTable style="repeater" repeatRows="1">\n'
+        tmp += '<tr><td >Matéria</td><td>Ementa</td>'
+        tmp += "</tr>\n" if sessao_finalizada else "<td>Situação</td></tr>\n"
 
-    tmp += '\t\t</blockTable>\n'
+        for expediente_materia in lst_expediente_materia:
+            tmp += '<tr><td><para style="P3"><b>' + str(expediente_materia['num_ordem']) + '</b> - ' + \
+                   expediente_materia["tipo_materia"] + ' No. ' + \
+                   expediente_materia['id_materia'] + '</para>\n' + '<para style="P3"><b>' + expediente_materia['num_autores'] + ': </b>' + \
+                   expediente_materia['nom_autor'] + '</para></td>\n'
+            txt_ementa = expediente_materia['txt_ementa'].replace('&', '&amp;')
+            if len(txt_ementa) > 1000:
+                txt_ementa = txt_ementa[:1000] + "..."
+            tmp += '<td><para style="P4">' + txt_ementa + '</para>' + '<para style="P4">' + expediente_materia['ordem_observacao'] + '</para></td>\n'
+
+            if sessao_finalizada:
+                tmp += '</tr>\n'
+            else:
+                tmp += '<td><para style="P3">' + str(expediente_materia['des_situacao']) + '</para></td></tr>\n'
+
+        tmp += '\t\t</blockTable>\n'
+    else:
+        tmp += '<para style="P2">Não há Matérias do Expediente.</para>'
+
     return tmp
 
 
-def votacao(lst_votacao):
+def votacao(lst_votacao, sessao_finalizada):
     """
     """
 
@@ -159,23 +165,33 @@ def votacao(lst_votacao):
     tmp += '\t\t<para style="P2">\n'
     tmp += '\t\t\t<font color="white"> </font>\n'
     tmp += '\t\t</para>\n'
-    tmp += '<blockTable style="repeater" repeatRows="1">\n'
-    tmp += '<tr><td >Matéria</td><td >Ementa</td><td>Situação</td></tr>\n'
-    for votacao in lst_votacao:
-        tmp += '<tr><td><para style="P3"><b>' + str(votacao['num_ordem']) + '</b> - ' + \
-               votacao["tipo_materia"] + ' No. ' + \
-               str(votacao['id_materia']) + '</para>\n' + '<para style="P3"><b>Processo: </b>' + \
-               str(votacao['des_numeracao']) + '</para>\n' + '<para style="P3"><b>Turno: </b>' + \
-               str(votacao['des_turno']) + '</para>\n' + '<para style="P3"><b>'+votacao['num_autores']+': </b>' + \
-               str(votacao['nom_autor']) + '</para></td>\n'
-        txt_ementa = votacao['txt_ementa'].replace('&', '&amp;')
-        if len(txt_ementa) > 1000:
-            txt_ementa = txt_ementa[:1000] + "..."
-        tmp += '<td><para style="P4">' + txt_ementa + '</para>' + '<para style="P4">' + votacao['ordem_observacao'] + '</para></td>\n'
-        tmp += '<td><para style="P3">' + \
-            str(votacao['des_situacao']) + '</para></td></tr>\n'
 
-    tmp += '\t\t</blockTable>\n'
+    if lst_votacao:
+        tmp += '<blockTable style="repeater" repeatRows="1">\n'
+        tmp += '<tr><td >Matéria</td><td>Ementa</td>'
+        tmp += "</tr>\n" if sessao_finalizada else "<td>Situação</td></tr>\n"
+
+        for votacao in lst_votacao:
+            tmp += '<tr><td><para style="P3"><b>' + str(votacao['num_ordem']) + '</b> - ' + \
+                   votacao["tipo_materia"] + ' No. ' + \
+                   str(votacao['id_materia']) + '</para>\n' + '<para style="P3"><b>Processo: </b>' + \
+                   str(votacao['des_numeracao']) + '</para>\n' + '<para style="P3"><b>Turno: </b>' + \
+                   str(votacao['des_turno']) + '</para>\n' + '<para style="P3"><b>'+votacao['num_autores']+': </b>' + \
+                   str(votacao['nom_autor']) + '</para></td>\n'
+            txt_ementa = votacao['txt_ementa'].replace('&', '&amp;')
+            if len(txt_ementa) > 1000:
+                txt_ementa = txt_ementa[:1000] + "..."
+            tmp += '<td><para style="P4">' + txt_ementa + '</para>' + '<para style="P4">' + votacao['ordem_observacao'] + '</para></td>\n'
+
+            if sessao_finalizada:
+                tmp += '</tr>\n'
+            else:
+                tmp += '<td><para style="P3">' + str(votacao['des_situacao']) + '</para></td></tr>\n'
+
+        tmp += '\t\t</blockTable>\n'
+    else:
+        tmp += '<para style="P2">Não há Matérias da Ordem do Dia.</para>'
+
     return tmp
 
 
@@ -202,8 +218,8 @@ def principal(rodape_dic, imagem, inf_basicas_dic, lst_expediente_materia, lst_v
     tmp += '\t<story>\n'
     tmp += inf_basicas(inf_basicas_dic)
     tmp += build_expedientes(expedientes)
-    tmp += expediente_materia(lst_expediente_materia)
-    tmp += votacao(lst_votacao)
+    tmp += expediente_materia(lst_expediente_materia, inf_basicas_dic["sessao_finalizada"])
+    tmp += votacao(lst_votacao, inf_basicas_dic["sessao_finalizada"])
     tmp += '\t</story>\n'
     tmp += '</document>\n'
 
